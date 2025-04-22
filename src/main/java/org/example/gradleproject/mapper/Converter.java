@@ -1,6 +1,6 @@
 package org.example.gradleproject.mapper;
 
-public interface Converter<E, D> {
-    D convertToDTO(E entity);
-    E convertToEntity(D dto);
+public interface Converter<Entity, EntityDTO> {
+    EntityDTO convertToDTO(Entity entity);
+    Entity convertToEntity(EntityDTO dto);
 }

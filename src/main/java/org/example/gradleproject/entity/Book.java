@@ -4,27 +4,40 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.util.*;
 
+
 @Entity
 @Table(name = "books")
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@AttributeOverride(name = "id", column = @Column(name = "BookID"))
-public class Book extends BaseModel {
+public class Book extends BaseEntity {
 
-    String Title;
-    Double Price;
+    @Column(name = "title", nullable = false)
+    private String title;
+
+    @Column(name = "price", nullable = false)
+    private Double price;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "Category")
+    @Column(name = "category", nullable = false)
     private Category category;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "AuthorID")
+    @JoinColumn(name = "author_id", nullable = false)
     private Author author;
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Sale> sales ;
+    private List<Sale> sales = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "title='" + title + '\'' +
+                ", price=" + price +
+                ", category=" + category +
+                ", author=" + author +
+                ", sales=" + sales +
+                '}';
+    }
 }

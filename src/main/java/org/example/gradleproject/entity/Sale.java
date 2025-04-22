@@ -2,25 +2,24 @@ package org.example.gradleproject.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import java.util.*;
+import java.time.LocalDate;
+import java.util.Objects;
 
 @Entity
 @Table(name = "sales")
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@AttributeOverride(name = "id", column = @Column(name = "SaleID"))
-public class Sale extends BaseModel{
+public class Sale extends BaseEntity {
 
+    @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
-    @Column(name = "Saledate")
-    @Temporal(TemporalType.DATE)
-    private Date saleDate;
+    @Column(name = "sale_date", nullable = false)
+    private LocalDate saleDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "BookID", nullable = false)
+    @JoinColumn(name = "book_id", nullable = false)
     private Book book;
 }

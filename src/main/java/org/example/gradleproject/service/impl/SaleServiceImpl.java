@@ -11,21 +11,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.UUID;
 
 @Service
-public class SaleServiceImpl extends BaseServiceImpl<Sale,SaleDTO,Long> implements SaleService {
+public class SaleServiceImpl extends BaseServiceImpl<Sale,SaleDTO,UUID> implements SaleService {
 
     @Autowired
-    BaseRepository<Sale, Long> saleRepository;
+    BaseRepository<Sale, UUID> saleRepository;
 
     @Autowired
     Converter<Sale,SaleDTO> saleConverter;
 
 
     @Override
-    JpaRepository<Sale, Long> getRepository() {
+    JpaRepository<Sale, UUID> getRepository() {
         return saleRepository;
     }
 

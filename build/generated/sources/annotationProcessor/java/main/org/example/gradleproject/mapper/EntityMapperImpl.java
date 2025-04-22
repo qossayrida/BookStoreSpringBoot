@@ -6,12 +6,11 @@ import org.example.gradleproject.dto.BookDTO;
 import org.example.gradleproject.dto.SaleDTO;
 import org.example.gradleproject.entity.Author;
 import org.example.gradleproject.entity.Book;
-import org.example.gradleproject.entity.Category;
 import org.example.gradleproject.entity.Sale;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-04-22T14:15:05+0300",
+    date = "2025-04-22T20:41:02+0300",
     comments = "version: 1.4.2.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-8.5.jar, environment: Java 19.0.2 (Amazon.com Inc.)"
 )
 public class EntityMapperImpl implements EntityMapper {
@@ -24,9 +23,11 @@ public class EntityMapperImpl implements EntityMapper {
 
         AuthorDTO authorDTO = new AuthorDTO();
 
-        authorDTO.setAuthorID( author.getId() );
+        authorDTO.setUuid( author.getUuid() );
         authorDTO.setName( author.getName() );
         authorDTO.setCountry( author.getCountry() );
+
+        authorDTO.setBooks( mapToReferences(author.getBooks()) );
 
         return authorDTO;
     }
@@ -39,7 +40,7 @@ public class EntityMapperImpl implements EntityMapper {
 
         Author author = new Author();
 
-        author.setId( authorDTO.getAuthorID() );
+        author.setUuid( authorDTO.getUuid() );
         author.setName( authorDTO.getName() );
         author.setCountry( authorDTO.getCountry() );
 
@@ -54,13 +55,13 @@ public class EntityMapperImpl implements EntityMapper {
 
         BookDTO bookDTO = new BookDTO();
 
-        bookDTO.setAuthorId( bookAuthorId( book ) );
-        bookDTO.setBookID( book.getId() );
+        bookDTO.setAuthor( entityToReference( book.getAuthor() ) );
+        bookDTO.setUuid( book.getUuid() );
         bookDTO.setTitle( book.getTitle() );
         bookDTO.setPrice( book.getPrice() );
-        if ( book.getCategory() != null ) {
-            bookDTO.setCategory( book.getCategory().name() );
-        }
+        bookDTO.setCategory( book.getCategory() );
+
+        bookDTO.setSales( mapToReferences(book.getSales()) );
 
         return bookDTO;
     }
@@ -73,12 +74,12 @@ public class EntityMapperImpl implements EntityMapper {
 
         Book book = new Book();
 
-        book.setId( bookDTO.getAuthorId() );
+        book.setUuid( bookDTO.getUuid() );
         book.setTitle( bookDTO.getTitle() );
         book.setPrice( bookDTO.getPrice() );
-        if ( bookDTO.getCategory() != null ) {
-            book.setCategory( Enum.valueOf( Category.class, bookDTO.getCategory() ) );
-        }
+        book.setCategory( bookDTO.getCategory() );
+
+        book.setAuthor( referenceToEntity(bookDTO.getAuthor(), Author.class) );
 
         return book;
     }
@@ -91,8 +92,8 @@ public class EntityMapperImpl implements EntityMapper {
 
         SaleDTO saleDTO = new SaleDTO();
 
-        saleDTO.setBookId( saleBookId( sale ) );
-        saleDTO.setSaleID( sale.getId() );
+        saleDTO.setBook( entityToReference( sale.getBook() ) );
+        saleDTO.setUuid( sale.getUuid() );
         saleDTO.setQuantity( sale.getQuantity() );
         saleDTO.setSaleDate( sale.getSaleDate() );
 
@@ -107,40 +108,12 @@ public class EntityMapperImpl implements EntityMapper {
 
         Sale sale = new Sale();
 
-        sale.setId( saleDTO.getSaleID() );
+        sale.setUuid( saleDTO.getUuid() );
         sale.setQuantity( saleDTO.getQuantity() );
         sale.setSaleDate( saleDTO.getSaleDate() );
 
+        sale.setBook( referenceToEntity(saleDTO.getBook(), Book.class) );
+
         return sale;
-    }
-
-    private Long bookAuthorId(Book book) {
-        if ( book == null ) {
-            return null;
-        }
-        Author author = book.getAuthor();
-        if ( author == null ) {
-            return null;
-        }
-        Long id = author.getId();
-        if ( id == null ) {
-            return null;
-        }
-        return id;
-    }
-
-    private Long saleBookId(Sale sale) {
-        if ( sale == null ) {
-            return null;
-        }
-        Book book = sale.getBook();
-        if ( book == null ) {
-            return null;
-        }
-        Long id = book.getId();
-        if ( id == null ) {
-            return null;
-        }
-        return id;
     }
 }

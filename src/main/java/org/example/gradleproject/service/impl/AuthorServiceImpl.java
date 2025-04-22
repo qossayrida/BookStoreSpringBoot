@@ -15,16 +15,16 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class AuthorServiceImpl extends BaseServiceImpl<Author,AuthorDTO,Long> implements AuthorService {
+public class AuthorServiceImpl extends BaseServiceImpl<Author,AuthorDTO,UUID> implements AuthorService {
 
     @Autowired
-    BaseRepository<Author, Long> authorRepository;
+    BaseRepository<Author, UUID> authorRepository;
 
     @Autowired
     Converter<Author, AuthorDTO> authorConverter;
 
     @Override
-    JpaRepository<Author, Long> getRepository() {
+    JpaRepository<Author, UUID> getRepository() {
         return authorRepository;
     }
 

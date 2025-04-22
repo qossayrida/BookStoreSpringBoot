@@ -18,31 +18,22 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class BookServiceImpl extends BaseServiceImpl<Book,BookDTO,Long> implements BookService{
+public class BookServiceImpl extends BaseServiceImpl<Book,BookDTO,UUID> implements BookService{
 
     @Autowired
-    BaseRepository<Book, Long> bookRepository;
+    BaseRepository<Book, UUID> bookRepository;
 
     @Autowired
     Converter<Book,BookDTO> bookConverter;
 
 
     @Override
-    JpaRepository getRepository() {
+    JpaRepository<Book,UUID> getRepository() {
         return bookRepository;
     }
 
     @Override
     Converter<Book, BookDTO> getConverter() {
         return bookConverter;
-    }
-
-    public List<SaleDTO> getBookSales(Long bookId) {
-        Book book = bookRepository.findById(bookId).get();
-
-        List<Sale> sales = book.getSales();
-        return sales.stream()
-                .map(EntityMapper.entityMapper::saleToSaleDTO)
-                .collect(Collectors.toList());
     }
 }
