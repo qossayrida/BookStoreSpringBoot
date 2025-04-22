@@ -159,15 +159,6 @@ http://localhost:8080/swagger-ui/index.html
 
 ---
 
-## 🔐 Example APIs
-
-- `GET /books`
-- `POST /books`
-- `GET /categories`
-- `POST /categories`
-
----
-
 ## 💡 Why Use Generic Services?
 
 - **Avoid code duplication** across services.
@@ -178,7 +169,6 @@ http://localhost:8080/swagger-ui/index.html
 This pattern is especially useful for:
 - CRUD-based systems (ERP, CMS, eCommerce, etc.)
 - Microservices where many entities share similar logic.
-
 
 
 ## Contact
