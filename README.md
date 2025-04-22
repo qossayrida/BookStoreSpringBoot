@@ -101,8 +101,8 @@ curl http://localhost:8080/v3/api-docs -o src/main/resources/openapi.yaml
 ```bash
 cd .../BookStoreSpringBoot-GenericServices/backend-sdk
 npm install axios
-# (Optional, for TypeScript types)
 npm install --save-dev @types/axios
+npm run build
 ```
 
 ### Step 4: Install SDK into React project
