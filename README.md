@@ -96,12 +96,10 @@ curl http://localhost:8080/v3/api-docs -o src/main/resources/openapi.yaml
 ./gradlew generateSdk
 ```
 
-### Step 3: Install Axios inside SDK directory
+### Step 3: NPM Install inside SDK directory
 
 ```bash
-cd .../BookStoreSpringBoot-GenericServices/backend-sdk
-npm install axios
-npm install --save-dev @types/axios
+npm install
 npm run build
 ```
 
@@ -111,15 +109,6 @@ npm run build
 cd .../BookStoreReact-GenericServices
 npm install .../BookStoreSpringBoot-GenericServices/backend-sdk
 ```
-
-Now you can import your SDK APIs inside React:
-```javascript
-import { BooksApi } from 'backend-sdk';
-
-const api = new BooksApi({ basePath: 'http://localhost:8080' });
-api.getAllBooks().then(response => console.log(response.data));
-```
-
 
 ## Contact
 
