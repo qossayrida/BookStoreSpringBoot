@@ -82,6 +82,44 @@ You can access Swagger UI for API documentation (if configured) at:
 http://localhost:8080/swagger-ui/index.html
 ```
 
+## Generating and Using SDK in React
+
+### Step 1: Export OpenAPI spec
+
+```bash
+curl http://localhost:8080/v3/api-docs -o src/main/resources/openapi.yaml
+```
+
+### Step 2: Generate SDK
+
+```bash
+./gradlew generateSdk
+```
+
+### Step 3: Install Axios inside SDK directory
+
+```bash
+cd .../BookStoreSpringBoot-GenericServices/backend-sdk
+npm install axios
+# (Optional, for TypeScript types)
+npm install --save-dev @types/axios
+```
+
+### Step 4: Install SDK into React project
+
+```bash
+cd .../BookStoreReact-GenericServices
+npm install .../BookStoreSpringBoot-GenericServices/backend-sdk
+```
+
+Now you can import your SDK APIs inside React:
+```javascript
+import { BooksApi } from 'backend-sdk';
+
+const api = new BooksApi({ basePath: 'http://localhost:8080' });
+api.getAllBooks().then(response => console.log(response.data));
+```
+
 
 ## Contact
 
