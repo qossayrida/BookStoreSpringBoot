@@ -37,13 +37,6 @@ public class BookServiceImpl extends BaseServiceImpl<Book,BookDTO,Long> implemen
         return bookConverter;
     }
 
-    public BookDTO addBook(BookDTO bookDTO) {
-        Book book = EntityMapper.entityMapper.bookDTOToBook(bookDTO);
-        book = bookRepository.save(book);
-        return EntityMapper.entityMapper.bookToBookDTO(book);
-    }
-
-
     public List<SaleDTO> getBookSales(Long bookId) {
         Book book = bookRepository.findById(bookId).get();
 
@@ -52,31 +45,4 @@ public class BookServiceImpl extends BaseServiceImpl<Book,BookDTO,Long> implemen
                 .map(EntityMapper.entityMapper::saleToSaleDTO)
                 .collect(Collectors.toList());
     }
-
-
-//    public BookDTO getBook(Long id){
-//        return bookMapper.mapModelToDto(bookRepository.findById(id).get());
-//    }
-//
-//    public boolean removeBook(Long id){
-//        if(!bookRepository.findById(id).equals(Optional.empty())){
-//            bookRepository.deleteById(id);
-//            return true;
-//        }
-//        return false;
-//    }
-//
-//    public BookDTO updateBook (Long id, Map<String,String> body){
-//         Book book = bookRepository.findById(id).orElse(new Book());
-//         book.setPrice(Double.parseDouble(body.get("price")));
-//         book.setTitle(body.get("title"));
-//         book.setAuthorID(Integer.parseInt(body.get("authorID")));
-//         bookRepository.save(book);
-//         return bookMapper.mapModelToDto(book);
-//    }
-
-//    public BookDTO addBook (Map<String,String> body){
-//        Book book = new Book(Integer.parseInt(body.get("bookID")),body.get("title"),Integer.parseInt(body.get("authorID")),Double.parseDouble(body.get("price")));
-//        return BookMapper.mapToBookDto(bookRepository.save(book));
-//    }
 }

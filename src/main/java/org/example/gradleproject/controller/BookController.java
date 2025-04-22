@@ -35,40 +35,4 @@ public class BookController {
         List<SaleDTO> sales = bookService.getBookSales(id);
         return ApiResponse.success(sales, "sales fetched successfully");
     }
-
-//   @PostMapping("/add-book")
-//    public ApiResponse<BookDTO> addBook(@RequestBody BookDTO bookDTO) {
-//        BookDTO createdBook = bookService.addBook(bookDTO);
-//        return ApiResponse.success(createdBook, "Book added successfully");
-//    }
-
-
-
-//
-//    @DeleteMapping("/remove-book/{id}")
-//    public ApiResponse<Void> removeBook(@PathVariable Long id) {
-//        boolean removed = bookService.removeBook(id);
-//        if (removed) {
-//            return ApiResponse.success(null, "Book removed successfully");
-//        } else {
-//            return ApiResponse.error("Error removing book");
-//        }
-//    }
-//
-//    @PutMapping("/update-book/{id}")
-//    public ApiResponse<BookDTO> updateBook(@PathVariable Long id, @RequestBody Map<String, String> body) {
-//        BookDTO updatedBook = bookService.updateBook(id, body);
-//        return ApiResponse.success(updatedBook, "Book updated successfully");
-//    }
-
-//    @PostMapping("/add-book")
-//    public ApiResponse<BookDTO> addBook(@RequestBody @Validated Map<String, String> body) {
-//        BookDTO newBook = bookService.addBook(body);
-//        return ApiResponse.success(newBook, "Book added successfully");
-//    }
-
-    @GetMapping("/")
-    public ApiResponse<String> getHome() {
-        return ApiResponse.success("GG", "Home page accessed successfully");
-    }
 }

@@ -30,33 +30,4 @@ public class AuthorController {
     public ApiResponse<AuthorDTO> getAuthor(@PathVariable Long id) {
         return ApiResponse.success(authorService.getElement(id), "Author fetched successfully");
     }
-
-//    @GetMapping("/get-books-for-author/{id}")
-//    public ApiResponse<List<BookDTO>> getBooksByAuthorId(@PathVariable Long id) {
-//        List<BookDTO> books = authorService.getBooksByAuthorId(id);
-//        return ApiResponse.success(books, "books fetched successfully");
-//    }
-//
-//    @PostMapping("/add-author")
-//    public ApiResponse<AuthorDTO> addAuthor(@RequestBody Author author) {
-//        AuthorDTO newAuthor = authorService.addAuthor(author);
-//        return ApiResponse.success(newAuthor, "Author added successfully");
-//    }
-
-//    @DeleteMapping("/remove-author/{id}")
-//    public ApiResponse<Void> removeAuthor(@PathVariable Long id) {
-//        boolean removed = authorService.removeAuthor(id);
-//        if (removed) {
-//            return ApiResponse.success(null, "Author removed successfully");
-//        } else {
-//            return ApiResponse.error("Error removing Author");
-//        }
-//    }
-//
-//    @PutMapping("/update-author/{id}")
-//    public ApiResponse<AuthorDTO> updateAuthor(@PathVariable Long id, @RequestBody Map<String, String> body) {
-//        AuthorDTO updatedAuthor = authorService.updateAuthor(id, body);
-//        return ApiResponse.success(updatedAuthor, "Author updated successfully");
-//    }
-//
 }

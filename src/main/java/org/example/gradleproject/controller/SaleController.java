@@ -34,15 +34,4 @@ public class SaleController {
         return ApiResponse.success(saleDTO, "Book fetched successfully");
     }
 
-    @GetMapping("/try-error-codes/{id}")
-    public ApiResponse<List<String>> getAllErrors(@PathVariable Long id) {
-        ResourceBundle resourceBundle = ResourceBundle.getBundle("errorcodes", Locale.getDefault(), getClass().getClassLoader());
-        ArrayList<String> errorcodes = new ArrayList<>();
-        errorcodes.add("NOT_FOUND: " +resourceBundle.getString("NOT_FOUND"));
-        errorcodes.add("NOT_FOUND_DETAIL: " +resourceBundle.getString("NOT_FOUND_DETAIL"));
-        errorcodes.add("NOT_FOUND_DETAIL: " +resourceBundle.getString("NOT_FOUND_DETAIL").replace("{id}",String.valueOf(id)));
-
-        return ApiResponse.success(errorcodes, "Error codes fetched successfully");
-    }
-
 }
