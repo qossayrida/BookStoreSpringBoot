@@ -1,88 +1,195 @@
-# Gradle Project with Spring Boot
+# BookStore Spring Boot - Generic Services
 
-This project is a Spring Boot application built using Gradle. It demonstrates a basic structure for a RESTful API with services, controllers, and utility classes. The application is designed to handle entities, perform CRUD operations, and provide API responses.
+A simple and clean **Spring Boot** application demonstrating how to build a **BookStore** system using a powerful **Generic Services** architecture.
 
-## Features
+This project showcases best practices in:
+- Building **Generic CRUD Services** (Create, Read, Update, Delete)
+- Reducing code duplication across services
+- Organizing a scalable, maintainable backend architecture
 
-- **Spring Boot Framework**: Simplifies application development with built-in configurations.
-- **Gradle Build Tool**: Manages dependencies and builds the project.
-- **RESTful API**: Provides endpoints for managing resources.
-- **Service Layer**: Implements business logic.
-- **DTO and Entity Mapping**: Converts entities to DTOs and vice versa.
-- **Error Handling**: Demonstrates the use of error codes with `ResourceBundle`.
+## 📅 Project Overview
 
-## Project Structure
+Entities managed in this system:
+- **Book** (title, price, etc.)
+- **Category** (name, description, etc.)
 
-### Key Directories and Files
+Each entity has a standard set of CRUD operations provided **automatically** via **Generic Services**, without writing repeated service code for each model.
 
-- `src/main/java/org/example/gradleproject/controller/`
-    - Contains REST controllers like `SaleController` to handle HTTP requests.
+---
 
-- `src/main/java/org/example/gradleproject/service/`
-    - Contains service interfaces and implementations like `BaseServiceImpl` and `SaleService`.
+## 👥 Core Concept: Generic Services
 
-- `src/main/java/org/example/gradleproject/dto/`
-    - Contains Data Transfer Objects (DTOs) for transferring data between layers.
+**Generic Service** means that instead of writing the same CRUD methods again and again for each entity (Book, Category, etc.), you create **one service** that can handle **any entity type**.
 
-- `src/main/java/org/example/gradleproject/entity/`
-    - Contains entity classes representing database tables.
+The architecture includes:
 
-- `src/main/java/org/example/gradleproject/mapper/`
-    - Contains mappers for converting entities to DTOs and vice versa.
+### 1. `IGenericService<T, ID>` (Generic Service Interface)
 
-- `src/main/resources/`
-    - Contains configuration files and resource bundles (e.g., `errorcodes.properties`).
+Defines standard CRUD operations:
+```java
+public interface IGenericService<T, ID> {
+    List<T> findAll();
+    Optional<T> findById(ID id);
+    T save(T entity);
+    void deleteById(ID id);
+    T update(T entity);
+}
+```
+- `T` is the **Entity type** (e.g., Book, Category)
+- `ID` is the **Primary Key type** (e.g., Long, Integer)
 
-- `gradlew.bat`
-    - Windows batch script for running Gradle commands.
+### 2. `GenericServiceImpl<T, ID>` (Generic Service Implementation)
 
-## Endpoints
+Provides a **base implementation** for all CRUD operations:
+```java
+@Service
+public class GenericServiceImpl<T, ID> implements IGenericService<T, ID> {
 
-### SaleController
+    private final JpaRepository<T, ID> repository;
 
-1. **Get All Sales**
-    - **URL**: `/api/get-sale/all`
-    - **Method**: `GET`
-    - **Response**: List of all sales.
+    public GenericServiceImpl(JpaRepository<T, ID> repository) {
+        this.repository = repository;
+    }
 
-2. **Get Sale by ID**
-    - **URL**: `/api/get-sale/{id}`
-    - **Method**: `GET`
-    - **Response**: Sale details for the given ID.
+    @Override
+    public List<T> findAll() {
+        return repository.findAll();
+    }
 
-3. **Get Error Codes**
-    - **URL**: `/api/try-error-codes/{id}`
-    - **Method**: `GET`
-    - **Response**: List of error codes with dynamic placeholders.
+    @Override
+    public Optional<T> findById(ID id) {
+        return repository.findById(id);
+    }
 
-## Prerequisites
+    @Override
+    public T save(T entity) {
+        return repository.save(entity);
+    }
 
-- **Java 17 or higher**: Ensure `JAVA_HOME` is set correctly.
-- **Gradle**: Included in the project via the wrapper (`gradlew`).
+    @Override
+    public void deleteById(ID id) {
+        repository.deleteById(id);
+    }
 
-## Running the Application
+    @Override
+    public T update(T entity) {
+        return repository.save(entity);
+    }
+}
+```
+- The service is injected with the entity's **JpaRepository**.
+- All methods delegate directly to the repository.
 
-1. Clone the repository:
-   ```bash
-   git clone <repository-url>
-   cd <repository-folder>
-   ```
+### 3. Specific Services (e.g., `BookService`, `CategoryService`)
 
-2. Build the project:
-   ```bash
-   ./gradlew build
-   ```
+Concrete services simply **extend** the generic service:
+```java
+@Service
+public class BookService extends GenericServiceImpl<Book, Long> {
 
-3. Run the application:
-   ```bash
-   ./gradlew bootRun
-   ```
+    public BookService(BookRepository repository) {
+        super(repository);
+    }
+}
+```
+No need to write CRUD methods again!
 
-4. Access the API at `http://localhost:8080`.
+Same for Category:
+```java
+@Service
+public class CategoryService extends GenericServiceImpl<Category, Long> {
 
-## Error Handling
+    public CategoryService(CategoryRepository repository) {
+        super(repository);
+    }
+}
+```
 
-The project uses a `ResourceBundle` to manage error codes. Example error codes include:
-- `NOT_FOUND`: Indicates a resource was not found.
-- `NOT_FOUND_DETAIL`: Provides detailed information about the missing resource.
+---
+
+## 🏙️ Project Structure
+
+```
+├── controller/
+│   ├── BookController.java
+│   └── CategoryController.java
+├── model/
+│   ├── Book.java
+│   └── Category.java
+├── repository/
+│   ├── BookRepository.java
+│   └── CategoryRepository.java
+├── service/
+│   ├── IGenericService.java
+│   ├── GenericServiceImpl.java
+│   ├── BookService.java
+│   └── CategoryService.java
+└── BookStoreApplication.java
+```
+
+- `controller/`: REST APIs
+- `model/`: JPA Entity classes
+- `repository/`: Spring Data JPA Repositories
+- `service/`: Generic services + Entity-specific services
+
+---
+
+## 🌐 Running the Application
+
+Make sure you have:
+- Java 17+
+- Maven installed
+
+Then:
+```bash
+git clone https://github.com/qossayrida/BookStoreSpringBoot-GenericServices.git
+cd BookStoreSpringBoot-GenericServices
+mvn spring-boot:run
+```
+
+App runs by default on:
+```
+http://localhost:8080
+```
+
+You can access Swagger UI for API documentation (if configured) at:
+```
+http://localhost:8080/swagger-ui/index.html
+```
+
+---
+
+## 🔐 Example APIs
+
+- `GET /books`
+- `POST /books`
+- `GET /categories`
+- `POST /categories`
+
+---
+
+## 💡 Why Use Generic Services?
+
+- **Avoid code duplication** across services.
+- **Faster** when adding new entities: you only create model, repository, controller!
+- **Easier to maintain**: fix logic once in `GenericServiceImpl`, affects all services.
+- **Cleaner project structure**.
+
+This pattern is especially useful for:
+- CRUD-based systems (ERP, CMS, eCommerce, etc.)
+- Microservices where many entities share similar logic.
+
+
+
+## Contact
+
+For any inquiries or further information, please contact the lab supervisor at
+
+[![facebook](https://img.shields.io/badge/facebook-0077B5?style=for-the-badge&logo=facebook&logoColor=white)](https://www.facebook.com/qossay.rida?mibextid=2JQ9oc)
+
+[![Whatsapp](https://img.shields.io/badge/Whatsapp-25D366?style=for-the-badge&logo=Whatsapp&logoColor=white)](https://wa.me/+972598592423)
+
+[![linkedin](https://img.shields.io/badge/linkedin-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/qossay-rida-3aa3b81a1?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app )
+
+[![twitter](https://img.shields.io/badge/twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/qossayrida)
 
